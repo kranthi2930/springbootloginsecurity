@@ -42,7 +42,8 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Ensures login page is mapped
-                        .defaultSuccessUrl("/home", true) // Redirects to home.jsp after login
+                        .loginProcessingUrl("/login") // ⚠️ Must match form action in login.jsp
+                        .defaultSuccessUrl("/home", true) // Redirect to home.jsp after login
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -52,8 +53,7 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-
-                .csrf(csrf -> csrf.disable()); // Disable CSRF for testing
+                .csrf(csrf -> csrf.disable()); // ⚠️ Temporarily disable CSRF for testing
 
         return http.build();
     }

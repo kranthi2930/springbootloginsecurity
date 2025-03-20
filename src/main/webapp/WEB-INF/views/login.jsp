@@ -5,7 +5,12 @@
 </head>
 <body>
     <h2>Login</h2>
-    <form method="post" action="/auth/login">
+
+    <form method="post" action="login">  <!-- ⚠️ Spring Security expects /login as POST -->
+
+        <!-- <form method="post" action="/auth/login">  -->
+
+
         <label>Username:</label>
         <input type="text" name="username" required><br><br>
         <label>Password:</label>

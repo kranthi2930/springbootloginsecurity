@@ -35,8 +35,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/resources/**", "/static/**").permitAll() // Allow login and static files
+                        .requestMatchers("/login", "/resources/**", "/static/**").permitAll() // Allow login page
                         .requestMatchers("/home").authenticated() // Home requires authentication
+                        .requestMatchers("/WEB-INF/views/**").permitAll() // ⚠️ Exclude JSP views from security!
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
