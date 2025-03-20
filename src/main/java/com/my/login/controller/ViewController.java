@@ -9,16 +9,17 @@ public class ViewController {
 
     @GetMapping("/")
     public String defaultPage() {
-        return "login"; // Loads /WEB-INF/views/login.jsp
+        return "redirect:/login"; // Redirects to /login
     }
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login"; // Loads /WEB-INF/views/login.jsp
+        System.out.println("✅ /login mapping called, returning 'login.jsp'"); // Debugging
+        return "login"; // Resolves to /WEB-INF/views/login.jsp
     }
 
     @GetMapping("/home")
     public String homePage() {
-        return "home"; // Loads /WEB-INF/views/home.jsp
+        return "home"; // Resolves to /WEB-INF/views/home.jsp
     }
 }

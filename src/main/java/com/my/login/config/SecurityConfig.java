@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,6 +25,9 @@ public class SecurityConfig {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
+
+        System.out.println("AuthenticationManager initialized"); // Debug line
+
         return new ProviderManager(List.of(authProvider));
     }
 
@@ -31,12 +35,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/resources/**", "/static/**").permitAll()
+                        .requestMatchers("/login", "/resources/**", "/static/**").permitAll() // Allow login page
+                        .requestMatchers("/home").authenticated() // Home requires authentication
+                        .requestMatchers("/WEB-INF/views/**").permitAll() // ⚠️ Exclude JSP views from security!
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Redirects to /login instead of /WEB-INF/views/login.jsp
-                        .defaultSuccessUrl("/home", true)
+                        .loginPage("/login") // Ensures login page is mapped
+                        .defaultSuccessUrl("/home", true) // Redirects to home.jsp after login
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -45,7 +51,9 @@ public class SecurityConfig {
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
-                );
+                )
+
+                .csrf(csrf -> csrf.disable()); // Disable CSRF for testing
 
         return http.build();
     }

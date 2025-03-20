@@ -2,7 +2,6 @@ package com.my.login.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ViewController {
@@ -10,11 +9,12 @@ public class ViewController {
 
     @GetMapping("/")
     public String defaultPage() {
-        return "login"; // Resolves to /WEB-INF/views/login.jsp
+        return "redirect:/login"; // Redirects to /login
     }
 
     @GetMapping("/login")
     public String loginPage() {
+        System.out.println("/login mapping called"); // Debugging
         return "login"; // Resolves to /WEB-INF/views/login.jsp
     }
 

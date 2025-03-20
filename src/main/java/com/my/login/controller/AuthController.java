@@ -26,10 +26,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public void login(@RequestBody LoginRequest loginRequest, HttpServletResponse response) throws IOException {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        System.out.println("Login attempt for user: " + loginRequest.getUsername());
+
+        Authentication authentication = authenticationManager.
+                authenticate(new UsernamePasswordAuthenticationToken
+                                (loginRequest.getUsername(), loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().
+                setAuthentication(authentication);
+
+        System.out.println("User authenticated, redirecting to home");
 
         // Redirect to home page after successful login
         response.sendRedirect("/home");
